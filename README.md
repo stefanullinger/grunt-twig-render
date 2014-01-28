@@ -34,7 +34,7 @@ grunt.initConfig({
       },
       files : [
         {
-          data: // Path to JSON or YAML file, or POJO
+          data: // Path to JSON file, or POJO
           template: // Path to template file
           dest: // Path to output destination here
         }
