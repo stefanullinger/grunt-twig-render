@@ -53,17 +53,24 @@ grunt.initConfig({
 
 ```js
 files: [
-  {data: "path/to/data/file.json",
-   template: "path/to/template.twig",
-   dest: "file/to/output.html"}
+  {
+    data: "path/to/data/file.json",
+    template: "path/to/template.twig",
+    dest: "file/to/output.html"
+  }
 ]
 ```
 
 ```js
 files: [
-  {data: { greeting: "Hello", target: "world" },
-   template: "path/to/template.twig",
-   dest: "file/to/output.html"}
+  {
+    data: { 
+      greeting: "Hello",
+      target: "world"
+    },
+    template: "path/to/template.twig",
+    dest: "file/to/output.html"
+  }
 ]
 ```
 
