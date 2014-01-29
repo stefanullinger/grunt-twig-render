@@ -1,6 +1,7 @@
 # grunt-twig-render
 
 [![Build Status](https://travis-ci.org/sullinger/grunt-twig-render.png?branch=master)](https://travis-ci.org/sullinger/grunt-twig-render)
+[![NPM version](https://badge.fury.io/js/grunt-twig-render.png)](http://badge.fury.io/js/grunt-twig-render)
 
 > Render twig templates
 
