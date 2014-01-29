@@ -30,22 +30,36 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     twig_render: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
+      json_data_file: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world.json',
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_json_data_file.html'
+          }
+        ]
       },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!',
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
+      pojo_data_file: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world.pojo.txt',
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_pojo_data_file.html'
+          }
+        ]
       },
+      pojo_data: {
+        files: [
+          {
+            data: {
+              greeting: "Hello",
+              reversed_target: "dlrow"
+            },
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_pojo_data.html'
+          }
+        ]
+      }
     },
 
     // Unit tests.
