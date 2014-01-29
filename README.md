@@ -1,5 +1,7 @@
 # grunt-twig-render
 
+[![Build Status](https://travis-ci.org/sullinger/grunt-twig-render.png?branch=master)](https://travis-ci.org/sullinger/grunt-twig-render)
+
 > Render twig templates
 
 ## Getting Started
@@ -53,6 +55,10 @@ No options yet.
 ## Release History
 
 **Note:** Still under active development with no official release, use at your own risk.
+
+__0.2.0__
+
+  * Added basic tests.
 
 __0.1.0__
 
