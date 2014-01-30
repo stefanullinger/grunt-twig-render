@@ -239,6 +239,10 @@ options:
 
 **Note:** Still under active development with no official release, use at your own risk.
 
+__1.0.0__
+
+  * Rechecked code. Seems to be fine – releasing version 1.0.0.
+
 __0.3.1__
 
   * Updated version string.
