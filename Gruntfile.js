@@ -59,7 +59,136 @@ module.exports = function(grunt) {
             dest: 'tmp/hello_world_pojo_data.html'
           }
         ]
+      },
+      twig_filter_extensions: {
+        options: {
+          extensions: [
+
+            function(Twig) {
+              Twig.exports.extendFilter( "fooJoin", function(value, params) {
+                if (value === undefined || value === null) {
+                  return;
+                }
+
+                var join_str = "",
+                    output = [],
+                    keyset = null;
+
+                if (params && params[0]) {
+                    join_str = params[0];
+                }
+              
+                if (value instanceof Array) {
+                  output = value;
+                }
+                else {
+                  keyset = value._keys || Object.keys(value);
+                  
+                  Twig.forEach(keyset, function(key) {
+                    if (key === "_keys") {
+                      return; // Ignore the _keys property
+                    }
+                    
+                    if (value.hasOwnProperty(key)) {
+                      output.push(value[key]);
+                    }
+                  });
+                }
+              
+                return output.join(join_str);
+              });
+            }
+            
+          ]
+        },
+
+        files: [
+          {
+            data: {},
+            template: 'test/fixtures/templates/twig_filter_extensions.twig',
+            dest: 'tmp/twig_filter_extensions.html'
+          }
+        ]
+      },
+      twig_function_extensions: {
+        options: {
+          extensions: [
+
+            function(Twig) {
+              Twig.exports.extendFunction( "fooCycle", function(arr, i) {
+                var pos = i % arr.length;
+                return arr[pos];
+              });
+            }
+
+          ]
+        },
+
+        files: [
+          {
+            data: {},
+            template: 'test/fixtures/templates/twig_function_extensions.twig',
+            dest: 'tmp/twig_function_extensions.html'
+          }
+        ]
+      },
+      twig_tag_extensions: {
+        options: {
+          extensions: [
+
+            function(Twig) {
+              Twig.exports.extendTag({
+              
+                type: "fooSpaceless",
+                regex: /^fooSpaceless$/,
+                next: [
+                  "endFooSpaceless"
+                ],
+                open: true,
+
+                // Parse the html and return it without any spaces between tags
+                parse: function (token, context, chain) {
+
+                  var // Parse the output without any filter
+                  unfiltered = Twig.parse.apply(this, [token.output, context]),
+
+                  // A regular expression to find closing and opening tags with spaces between them
+                  rBetweenTagSpaces = />\s+</g,
+                  
+                  // Replace all space between closing and opening html tags
+                  output = unfiltered.replace(rBetweenTagSpaces,'><').trim();
+
+                  return {
+                    chain: chain,
+                    output: output
+                  };
+                }
+
+              });
+            },
+
+            function(Twig) {
+              Twig.exports.extendTag({
+              
+                type: "endFooSpaceless",
+                regex: /^endFooSpaceless$/,
+                next: [ ],
+                open: false
+
+              });
+            }
+          ]
+        },
+
+        files: [
+          {
+            data: {},
+            template: 'test/fixtures/templates/twig_tag_extensions.twig',
+            dest: 'tmp/twig_tag_extensions.html'
+          }
+        ]
       }
+      
     },
 
     // Unit tests.

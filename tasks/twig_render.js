@@ -8,20 +8,44 @@
 
 'use strict';
 
+// http://stackoverflow.com/questions/5999998/how-can-i-check-if-a-javascript-variable-is-function-type
+function isFunction(functionToCheck) {
+  var getType = {};
+  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+function isArray(variableToCheck) {
+  return Object.prototype.toString.call(variableToCheck) === '[object Array]';
+}
+
+function isPlainObject(variableToCheck) {
+  return Object(variableToCheck) === variableToCheck && Object.getPrototypeOf(variableToCheck) === Object.prototype;
+}
+
 module.exports = function(grunt) {
 
   var Twig = require("twig"),
 
   DEFAULT_OPTIONS = {
-    // nothing here yet
+    extensions: []
   };
 
   function GruntTwigRender(options) {
     this.options = options(DEFAULT_OPTIONS);
+
+    // validate type of extensions
+    if (false === isArray(this.options.extensions)) {
+      grunt.fail.fatal("extensions has to be an array of functions!");
+    }
+
+    // apply defined extensions
+    this.options.extensions.forEach(function(fn) {
+      Twig.extend(fn);
+    });
   }
 
   GruntTwigRender.prototype.render = function(data, template, dest) {
-    var data = this._getData(data);
+    data = this._getData(data);
     
     template = Twig.twig({
       path: template,
@@ -29,7 +53,7 @@ module.exports = function(grunt) {
     });
 
     grunt.file.write(dest, template.render(data));
-  }
+  };
 
   GruntTwigRender.prototype._getData = function(data)
   {
@@ -46,7 +70,7 @@ module.exports = function(grunt) {
     }
 
     return data;
-  }
+  };
 
   GruntTwigRender.prototype._getDataFromFile = function(dataPath) {
     if (/\.json/i.test(dataPath)) {
@@ -56,11 +80,11 @@ module.exports = function(grunt) {
       grunt.log.warn("Data file does not seem to be JSON. Trying to evaluate the file's contents into an javascript object. Use at your own risk!");
       return eval( '(' + grunt.file.read(dataPath) + ')' );
     }
-  }
+  };
 
 
   grunt.registerMultiTask('twig_render', 'Render twig templates', function() {
-    
+
     var renderer = new GruntTwigRender(this.options);
 
     this.files.forEach(function(fileData) {

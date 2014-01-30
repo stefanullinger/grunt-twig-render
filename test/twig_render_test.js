@@ -35,5 +35,50 @@ exports.twig_render = {
     test.equal(actual, expected, 'should render when given json data.');
 
     test.done();
+  },
+  pojo_data_file: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_world_pojo_data_file.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render when given json data.');
+
+    test.done();
+  },
+  pojo_data: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_world_pojo_data.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render when given json data.');
+
+    test.done();
+  },
+  twig_filter_extensions: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/twig_filter_extensions.html');
+    var expected = grunt.file.read('test/expected/twig_filter_extensions.html');
+    test.equal(actual, expected, 'should render when given json data.');
+
+    test.done();
+  },
+  twig_function_extensions: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/twig_function_extensions.html');
+    var expected = grunt.file.read('test/expected/twig_function_extensions.html');
+    test.equal(actual, expected, 'should render when given json data.');
+
+    test.done();
+  },
+  twig_tag_extensions: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/twig_tag_extensions.html');
+    var expected = grunt.file.read('test/expected/twig_tag_extensions.html');
+    test.equal(actual, expected, 'should render when given json data.');
+
+    test.done();
   }
 };
