@@ -76,11 +76,172 @@ files: [
 
 ### Options
 
-No options yet.
+#### options.extensions
+Type: `Array`  
+Default value: `[]`
+
+Can be an array of functions that extend TwigJS.
+
+##### Example 1: Filter Extension
+
+```js
+options:
+{
+  extensions:
+  [
+  
+    // Usage: {{ [1, 2, 3]|fooJoin(' | ') }}
+    // Output: 1 | 2 | 3
+
+    function(Twig)
+    {
+      Twig.exports.extendFilter( "fooJoin", function(value, params)
+      {
+        if (value === undefined || value === null)
+        {
+          return;
+        }
+
+        var join_str = "",
+            output = [],
+            keyset = null;
+
+        if (params && params[0])
+        {
+          join_str = params[0];
+        }
+              
+        if (value instanceof Array)
+        {
+          output = value;
+        }
+        else
+        {
+          keyset = value._keys || Object.keys(value);
+                  
+          Twig.forEach(keyset, function(key)
+          {
+            if (key === "_keys")
+            {
+              return; // Ignore the _keys property
+            }
+                    
+            if (value.hasOwnProperty(key))
+            {
+              output.push(value[key]);
+            }
+          });
+        }
+              
+        return output.join(join_str);
+      });
+    }
+            
+  ]
+}
+```
+
+##### Example 2: Function Extension
+
+```js
+options:
+{
+  extensions:
+  [
+  
+    // Usage:
+    //   {% for i in 1..3 %}
+    //   {{ fooCycle(['odd', 'even'], i) }}
+    //   {% endfor %}
+    
+    // Output:
+    //   even
+    //   odd
+    //   even
+
+    function(Twig)
+    {
+      Twig.exports.extendFunction( "fooCycle", function(arr, i)
+      {
+        var pos = i % arr.length;
+        return arr[pos];
+      });
+    }
+            
+  ]
+}
+```
+
+##### Example 3: Tag Extension
+
+```js
+options:
+{
+  extensions:
+  [
+  
+    // Usage:
+    //   {% fooSpaceless %}<div>
+    //   <b>b</b>   <i>i</i>
+    //   </div>{% endFooSpaceless %}
+    
+    // Output:
+    //   <div><b>b</b><i>i</i></div>
+    
+
+    function(Twig)
+    {
+      Twig.exports.extendTag(
+      {
+        type: "fooSpaceless",
+        regex: /^fooSpaceless$/,
+        next: [
+          "endFooSpaceless"
+        ],
+        open: true,
+
+        // Parse the html and return it without any spaces between tags
+        parse: function (token, context, chain)
+        {
+          // Parse the output without any filter
+          var unfiltered = Twig.parse.apply(this, [token.output, context]),
+
+          // A regular expression to find closing and opening tags with spaces between them
+          rBetweenTagSpaces = />\s+</g,
+                  
+          // Replace all space between closing and opening html tags
+          output = unfiltered.replace(rBetweenTagSpaces,'><').trim();
+
+          return {
+            chain: chain,
+            output: output
+          };
+        }
+      });
+    },
+
+    function(Twig)
+    {
+      Twig.exports.extendTag(
+      {
+        type: "endFooSpaceless",
+        regex: /^endFooSpaceless$/,
+        next: [ ],
+        open: false
+      });
+    }
+            
+  ]
+}
+```
 
 ## Release History
 
 **Note:** Still under active development with no official release, use at your own risk.
+
+__0.3.0__
+
+  * Added option to extend TwigJS functionality (filters, functions, tags).
 
 __0.2.0__
 
