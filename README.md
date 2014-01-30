@@ -239,6 +239,10 @@ options:
 
 **Note:** Still under active development with no official release, use at your own risk.
 
+__0.3.1__
+
+  * Updated version string.
+
 __0.3.0__
 
   * Added option to extend TwigJS functionality (filters, functions, tags).
