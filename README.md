@@ -237,6 +237,10 @@ options:
 
 ## Release History
 
+__1.0.1__
+
+  * Added debug output when the target file has been written.
+
 __1.0.0__
 
   * Rechecked code. Seems to be fine – releasing version 1.0.0.

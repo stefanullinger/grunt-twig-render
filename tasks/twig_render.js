@@ -8,6 +8,8 @@
 
 'use strict';
 
+var chalk = require( 'chalk' );
+
 // http://stackoverflow.com/questions/5999998/how-can-i-check-if-a-javascript-variable-is-function-type
 function isFunction(functionToCheck) {
   var getType = {};
@@ -72,6 +74,7 @@ module.exports = function(grunt) {
     return data;
   };
 
+  /* jshint -W061 */
   GruntTwigRender.prototype._getDataFromFile = function(dataPath) {
     if (/\.json/i.test(dataPath)) {
       return grunt.file.readJSON(dataPath);
@@ -89,6 +92,7 @@ module.exports = function(grunt) {
 
     this.files.forEach(function(fileData) {
       renderer.render(fileData.data, fileData.template, fileData.dest);
+      grunt.log.writeln('File ' + chalk.cyan(fileData.dest) + ' created.');
     });
 
   });
