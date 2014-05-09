@@ -235,6 +235,27 @@ options:
 }
 ```
 
+##### Example 4: Change TwigJS Settings via an Extension
+
+```js
+options:
+{
+  extensions:
+  [
+
+    function(Twig)
+    {
+      // Although it might not be obvious, you have access to the Twig instance within this function
+      // and can configure TwigJS as you like
+
+      // disables caching
+      Twig.cache = false;
+    }
+
+  ]
+}
+```
+
 ## Release History
 
 __1.0.1__
