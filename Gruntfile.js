@@ -39,6 +39,15 @@ module.exports = function(grunt) {
           }
         ]
       },
+      yml_data_file: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world.yml',
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_yml_data_file.html'
+          }
+        ]
+      },
       pojo_data_file: {
         files: [
           {
