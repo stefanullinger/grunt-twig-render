@@ -1,7 +1,7 @@
 {
   "name": "grunt-twig-render",
   "description": "Render twig templates",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "homepage": "https://github.com/sullinger/grunt-twig-render",
   "author": {
     "name": "Stefan Ullinger",
@@ -28,20 +28,20 @@
     "test": "grunt test"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-clean": "~0.4.0",
-    "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt": "~0.4.2"
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt": "~0.4.5"
   },
   "peerDependencies": {
-    "grunt": "~0.4.2"
+    "grunt": "~0.4.5"
   },
   "keywords": [
     "gruntplugin",
     "twig"
   ],
   "dependencies": {
-    "twig": "~0.6.0",
-    "chalk": "~0.4.0"
+    "twig": "~0.7.2",
+    "chalk": "~0.5.1"
   }
 }
