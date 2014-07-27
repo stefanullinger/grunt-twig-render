@@ -78,9 +78,11 @@ module.exports = function(grunt) {
   GruntTwigRender.prototype._getDataFromFile = function(dataPath) {
     if (/\.json/i.test(dataPath)) {
       return grunt.file.readJSON(dataPath);
+    } else if (/\.yml/i.test(dataPath) || /\.yaml/i.test(dataPath)) {
+      return grunt.file.readYAML(dataPath);
     }
     else {
-      grunt.log.warn("Data file does not seem to be JSON. Trying to evaluate the file's contents into an javascript object. Use at your own risk!");
+      grunt.log.warn("Data file does not seem to be JSON or YAML. Trying to evaluate the file's contents into an javascript object. Use at your own risk!");
       return eval( '(' + grunt.file.read(dataPath) + ')' );
     }
   };

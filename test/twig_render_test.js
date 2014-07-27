@@ -36,6 +36,15 @@ exports.twig_render = {
 
     test.done();
   },
+  yml_data_file: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_world_yml_data_file.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render when given yml data.');
+
+    test.done();
+  },
   pojo_data_file: function(test) {
     test.expect(1);
 
