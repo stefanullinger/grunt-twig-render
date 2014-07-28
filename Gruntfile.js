@@ -69,6 +69,20 @@ module.exports = function(grunt) {
           }
         ]
       },
+      multiple_data: {
+        files: [
+          {
+            data: [
+              'test/fixtures/objects/hello_world.yml',
+              {
+                reversed_target: "tenalp"
+              }
+            ],
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_planet_multiple_data.html'
+          }
+        ]
+      },
       twig_filter_extensions: {
         options: {
           extensions: [

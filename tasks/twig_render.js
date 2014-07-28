@@ -9,6 +9,7 @@
 'use strict';
 
 var chalk = require( 'chalk' );
+var merge = require( 'merge' );
 
 // http://stackoverflow.com/questions/5999998/how-can-i-check-if-a-javascript-variable-is-function-type
 function isFunction(functionToCheck) {
@@ -66,6 +67,19 @@ module.exports = function(grunt) {
     }
     else if (datatype === "string") {
       return this._getDataFromFile(data);
+    } else if (Array.isArray(data)) {
+      var mergedData = {};
+      data.forEach(function(item) {
+        if (typeof item === "string") {
+          item = this._getDataFromFile(item);
+        }
+        if (typeof item === 'object') {
+          mergedData = merge(mergedData, item);
+        } else {
+          grunt.log.warn("Item in array 'data' is not valid");
+        }
+      }.bind(this));
+      return mergedData;
     }
     else if (datatype !== "object") {
       grunt.log.warn("Received data of type '" + datatype + "'. Expected 'object' or 'string'. Use at your own risk!");

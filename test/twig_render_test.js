@@ -63,6 +63,15 @@ exports.twig_render = {
 
     test.done();
   },
+  multiple_data: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_planet_multiple_data.html');
+    var expected = grunt.file.read('test/expected/hello_planet_multiple_data.html');
+    test.equal(actual, expected, 'should render when given array of data items.');
+
+    test.done();
+  },
   twig_filter_extensions: function(test) {
     test.expect(1);
 
