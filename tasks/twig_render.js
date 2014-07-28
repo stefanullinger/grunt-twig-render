@@ -67,7 +67,8 @@ module.exports = function(grunt) {
     }
     else if (datatype === "string") {
       return this._getDataFromFile(data);
-    } else if (Array.isArray(data)) {
+    }
+    else if (Array.isArray(data)) {
       var mergedData = {};
       data.forEach(function(item) {
         if (typeof item === "string") {
