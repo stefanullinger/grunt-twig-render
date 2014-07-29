@@ -258,6 +258,10 @@ options:
 
 ## Release History
 
+__1.2.0__
+
+  * Allowing data to be an array of strings/objects.
+
 __1.1.0__
 
   * Added support for YAML data files.
