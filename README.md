@@ -46,6 +46,8 @@ grunt.initConfig({
   },
 });
 ```
+You can also use [Grunt built-in files syntax](http://gruntjs.com/configuring-tasks#files) for more dynamic lists.
+In that case, one of `data` or `template` must be specified, the other one will use the dynamic `src` property.
 
 **Note:** The `files` parameter _must_ be an array, and _must_ conform to the format specified above. Each object in the file array represents _one_ rendered template.
 
@@ -72,6 +74,51 @@ files: [
     dest: "file/to/output.html"
   }
 ]
+```
+
+Compile all your templates, with data from a central data file:
+```js
+grunt.initConfig({
+  twig_render: {
+    your_target: {
+      files : [
+        {
+          expand: true,
+          cwd: 'path/to/templates/',
+          src: ['**/*.twig', '!**/_*.twig'], // Match twig templates but not partials
+          dest: 'path/to/output/',
+          data: 'path/to/datafile.json',
+          ext: '.html'   // index.twig + datafile.json => index.html
+        }
+      ]
+    },
+  },
+});
+```
+
+Compile a list of posts, same template but different data files:
+```js
+grunt.initConfig({
+  twig_render: {
+    your_target: {
+      files : [
+        {
+                    src: ['post*.json'], // Actual pattern(s) to match.
+                    dest: '.tmp/',   // Destination path prefix.
+                    template: '<%= config.app %>/views/test.twig',
+                    ext: '.html'   // Dest filepaths will have this extension.
+                    },
+          expand: true,
+          cwd: 'path/to/data/',
+          src: ['post*.json'], // post1.json, post2.json,...
+          dest: 'path/to/output/',
+          template: 'path/to/template.twig',
+          ext: '.html'   // post1.json + template.twig => post1.html
+        }
+      ]
+    },
+  },
+});
 ```
 
 ### Options
