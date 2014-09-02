@@ -83,11 +83,11 @@ grunt.initConfig({
     your_target: {
       files : [
         {
+          data: 'path/to/datafile.json',
           expand: true,
           cwd: 'path/to/templates/',
           src: ['**/*.twig', '!**/_*.twig'], // Match twig templates but not partials
           dest: 'path/to/output/',
-          data: 'path/to/datafile.json',
           ext: '.html'   // index.twig + datafile.json => index.html
         }
       ]
@@ -103,16 +103,11 @@ grunt.initConfig({
     your_target: {
       files : [
         {
-                    src: ['post*.json'], // Actual pattern(s) to match.
-                    dest: '.tmp/',   // Destination path prefix.
-                    template: '<%= config.app %>/views/test.twig',
-                    ext: '.html'   // Dest filepaths will have this extension.
-                    },
+          template: 'path/to/template.twig',
           expand: true,
           cwd: 'path/to/data/',
           src: ['post*.json'], // post1.json, post2.json,...
           dest: 'path/to/output/',
-          template: 'path/to/template.twig',
           ext: '.html'   // post1.json + template.twig => post1.html
         }
       ]
