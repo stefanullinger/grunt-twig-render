@@ -10,6 +10,11 @@
 
 var chalk = require( 'chalk' );
 var merge = require( 'merge' );
+var json5 = require( 'json5' );
+if(json5) {
+  var fs = require('fs');
+  var path = require('path');
+}
 
 // http://stackoverflow.com/questions/5999998/how-can-i-check-if-a-javascript-variable-is-function-type
 function isFunction(functionToCheck) {
@@ -71,29 +76,29 @@ module.exports = function(grunt) {
     else if (Array.isArray(data)) {
       var mergedData = {};
       data.forEach(function(item) {
-        if (typeof item === "string") {
-          item = this._getDataFromFile(item);
-        }
-        if (typeof item === 'object') {
-          mergedData = merge(mergedData, item);
-        } else {
-          grunt.log.warn("Item in array 'data' is not valid");
-        }
+        item = this._getData(item);
+        mergedData = merge(mergedData, item);
       }.bind(this));
       return mergedData;
     }
     else if (datatype !== "object") {
       grunt.log.warn("Received data of type '" + datatype + "'. Expected 'object' or 'string'. Use at your own risk!");
     }
-
     return data;
   };
 
   /* jshint -W061 */
   GruntTwigRender.prototype._getDataFromFile = function(dataPath) {
-    if (/\.json/i.test(dataPath)) {
-      return grunt.file.readJSON(dataPath);
-    } else if (/\.yml/i.test(dataPath) || /\.yaml/i.test(dataPath)) {
+    if (/\.json[5]?$/i.test(dataPath)) {
+      if (json5) {
+        var dir = process.cwd();
+        var filepath = path.resolve(dir, dataPath);
+        var data = fs.readFileSync(filepath, 'utf8');
+        return json5.parse(data);
+      } else {
+        return grunt.file.readJSON(dataPath);
+      }
+    } else if (/\.yml$/i.test(dataPath) || /\.yaml/i.test(dataPath)) {
       return grunt.file.readYAML(dataPath);
     }
     else {
@@ -104,9 +109,7 @@ module.exports = function(grunt) {
 
 
   grunt.registerMultiTask('twig_render', 'Render twig templates', function() {
-
     var renderer = new GruntTwigRender(this.options);
-
     this.files.forEach(function(fileData) {
       // We want to allow globbing of data OR templates (can't do both),
       // but globbing expands the src parameter only.

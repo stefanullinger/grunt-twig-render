@@ -90,6 +90,15 @@ exports.twig_render = {
 
     test.done();
   },
+  json5_file: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_world_json5.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render when given JSON5.');
+
+    test.done();
+  },
   twig_filter_extensions: function(test) {
     test.expect(1);
 

@@ -37,7 +37,7 @@ grunt.initConfig({
       },
       files : [
         {
-          data: // Path to JSON or YAML file, or POJO, or Array of filepaths and POJO
+          data: // Path to JSON, JSON5 or YAML file, or POJO, or Array of filepaths and POJO
           template: // Path to template file
           dest: // Path to output destination here
         }
@@ -115,6 +115,31 @@ grunt.initConfig({
   },
 });
 ```
+
+### Data parameter
+
+The `data` parameter accepts multiple formats, here is a detailed description of each.
+
+#### JSON file
+`data` should be a string containing the path to a valid JSON file, ending in `.json`, relative to current directory.
+
+#### JSON5 file
+[JSON5](http://json5.org/) is an extension to standard JSON, allowing (among other things) comments and multi-line strings.
+This is an optional format, to enable it you need to install JSON5:
+```sh
+npm install json5
+```
+Then simply set `data` to the path of a json5 file (ending in `.json` or `.json5`).
+
+#### YAML file
+Set `data` to the path of a YAML (`.yml`) file.
+
+#### Javascript object
+Used as is.
+
+#### Array
+Each element of the array can be any of the accepted format, results are merged.
+In case of conflicts, last data in the array has priority.
 
 ### Options
 
@@ -299,6 +324,11 @@ options:
 ```
 
 ## Release History
+
+__1.3.0__
+
+  * Use src for data or template, allowing globbing and more
+  * Allow use of JSON5, if library is present (optional).
 
 __1.2.0__
 

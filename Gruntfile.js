@@ -101,6 +101,15 @@ module.exports = function(grunt) {
           }
         ]
       },
+      json5_file: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world.json5',
+            src: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_json5.html'
+          }
+        ]
+      },
       twig_filter_extensions: {
         options: {
           extensions: [
