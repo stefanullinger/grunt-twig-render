@@ -72,6 +72,24 @@ exports.twig_render = {
 
     test.done();
   },
+  src_as_data_file: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_world_src_as_data_file.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render when given src as data.');
+
+    test.done();
+  },
+  src_as_template_file: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_world_src_as_template_file.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render when given src as template.');
+
+    test.done();
+  },
   twig_filter_extensions: function(test) {
     test.expect(1);
 

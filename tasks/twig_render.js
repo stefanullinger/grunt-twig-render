@@ -113,9 +113,9 @@ module.exports = function(grunt) {
       // So we use src as the moving parameter, the other one (data or template)
       // MUST be specified.
       var src = fileData.src;
-      if (src && isArray(src)) src = src[0];
-      if(src && !fileData.template) fileData.template = src;
-      if(src && !fileData.data) fileData.data = src;
+      if (src && isArray(src)) {src = src[0];}
+      if(src && !fileData.template) {fileData.template = src;}
+      if(src && !fileData.data) {fileData.data = src;}
       renderer.render(fileData.data, fileData.template, fileData.dest);
       grunt.log.writeln('File ' + chalk.cyan(fileData.dest) + ' created.');
     });

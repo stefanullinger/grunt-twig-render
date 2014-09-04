@@ -83,6 +83,24 @@ module.exports = function(grunt) {
           }
         ]
       },
+      src_as_data_file: {
+        files: [
+          {
+            src: 'test/fixtures/objects/hello_world.json',
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_src_as_data_file.html'
+          }
+        ]
+      },
+      src_as_template_file: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world.json',
+            src: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_src_as_template_file.html'
+          }
+        ]
+      },
       twig_filter_extensions: {
         options: {
           extensions: [
