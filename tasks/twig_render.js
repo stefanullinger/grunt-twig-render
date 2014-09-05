@@ -10,11 +10,6 @@
 
 var chalk = require( 'chalk' );
 var merge = require( 'merge' );
-var json5 = require( 'json5' );
-if(json5) {
-  var fs = require('fs');
-  var path = require('path');
-}
 
 // http://stackoverflow.com/questions/5999998/how-can-i-check-if-a-javascript-variable-is-function-type
 function isFunction(functionToCheck) {
@@ -38,6 +33,18 @@ module.exports = function(grunt) {
     extensions: []
   };
 
+  var json5 = null;
+  try {
+    json5 = require( 'json5' );
+  } catch(err) {
+    grunt.log.ok("json5 not found, using regular json - if needed install with: npm install json5");
+  }
+  if(json5) {
+    var fs = require('fs');
+    var path = require('path');
+  }
+
+
   function GruntTwigRender(options) {
     this.options = options(DEFAULT_OPTIONS);
 
@@ -55,12 +62,13 @@ module.exports = function(grunt) {
   GruntTwigRender.prototype.render = function(data, template, dest) {
     data = this._getData(data);
     
-    template = Twig.twig({
-      path: template,
-      async: false
-    });
-
-    grunt.file.write(dest, template.render(data));
+    if(data) {
+      template = Twig.twig({
+        path: template,
+        async: false
+      });
+      grunt.file.write(dest, template.render(data));
+    }
   };
 
   GruntTwigRender.prototype._getData = function(data)
@@ -89,12 +97,16 @@ module.exports = function(grunt) {
 
   /* jshint -W061 */
   GruntTwigRender.prototype._getDataFromFile = function(dataPath) {
-    if (/\.json[5]?$/i.test(dataPath)) {
+    if (/\.json5$/i.test(dataPath)) {
       if (json5) {
-        var dir = process.cwd();
-        var filepath = path.resolve(dir, dataPath);
-        var data = fs.readFileSync(filepath, 'utf8');
-        return json5.parse(data);
+        return this._getDataFromJSON5(dataPath);
+      } else {
+        grunt.log.warn("Reading from a JSON5 but library missing - install it with: npm install json5");
+        return null;
+      }
+    } else if (/\.json?$/i.test(dataPath)) {
+      if (json5) {
+        return this._getDataFromJSON5(dataPath);
       } else {
         return grunt.file.readJSON(dataPath);
       }
@@ -107,6 +119,12 @@ module.exports = function(grunt) {
     }
   };
 
+  GruntTwigRender.prototype._getDataFromJSON5 = function(dataPath) {
+    var dir = process.cwd();
+    var filepath = path.resolve(dir, dataPath);
+    var data = fs.readFileSync(filepath, 'utf8');
+    return json5.parse(data);
+  };
 
   grunt.registerMultiTask('twig_render', 'Render twig templates', function() {
     var renderer = new GruntTwigRender(this.options);

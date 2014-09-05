@@ -27,6 +27,7 @@ exports.twig_render = {
     // setup here if necessary
     done();
   },
+
   json_data_file: function(test) {
     test.expect(1);
 
@@ -92,11 +93,26 @@ exports.twig_render = {
   },
   json5_file: function(test) {
     test.expect(1);
+    
+    var hasJson5;
+    try {
+      hasJson5 = require('json5');
+      hasJson5 = true;
+    } catch(err) {
+      // ignore
+      hasJson5 = false;
+    }
 
-    var actual = grunt.file.read('tmp/hello_world_json5.html');
-    var expected = grunt.file.read('test/expected/hello_world.html');
-    test.equal(actual, expected, 'should render when given JSON5.');
-
+    var generatedFile = 'tmp/hello_world_json5.html';
+    var expectedFile = 'test/expected/hello_world.html';
+    if(hasJson5) {
+      var actual = grunt.file.read(generatedFile);
+      var expected = grunt.file.read(expectedFile);
+      test.equal(actual, expected, 'should render when given JSON5.');
+    } else {
+      var fs = require('fs');
+      test.equal(false, fs.existsSync(generatedFile), "should not render any file if JSON5 missing and data=json5");
+    }
     test.done();
   },
   twig_filter_extensions: function(test) {
