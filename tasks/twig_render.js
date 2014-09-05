@@ -44,6 +44,17 @@ module.exports = function(grunt) {
     var path = require('path');
   }
 
+  function getProperty( protertyInDotNotation, object ) {
+    var parts = protertyInDotNotation.split( "." ),
+    length = parts.length,
+    i,
+    property = object;
+    for ( i = 0; i < length; i++ ) {
+      property = property[parts[i]];
+    }
+    return property;
+  }
+
 
   function GruntTwigRender(options) {
     this.options = options(DEFAULT_OPTIONS);
@@ -59,40 +70,64 @@ module.exports = function(grunt) {
     });
   }
 
-  GruntTwigRender.prototype.render = function(data, template, dest) {
-    data = this._getData(data);
-    
-    if(data) {
-      template = Twig.twig({
-        path: template,
-        async: false
-      });
-      grunt.file.write(dest, template.render(data));
+  GruntTwigRender.prototype.render = function(data, dataPath, template, dest) {
+    var actualData = this._getData(data, dataPath);
+    var replacer = function(match, filename, extension) {
+      return filename+"_"+i+extension;
+    };
+
+    if(actualData) {
+      if(isArray(actualData)) {
+        for (var i = 0, len = actualData.length; i < len; i++) { 
+          var tt = Twig.twig({path: template, async: false});
+          // compute destination path by inserting '_n'
+          var destPath = dest.replace(/(.*)(\.[^\.]+)$/, replacer);
+          grunt.log.ok("dg="+destPath);
+          grunt.file.write(destPath, tt.render(actualData[i]));
+        }
+      } else {
+        var twigTemplate = Twig.twig({
+          path: template,
+          async: false
+        });
+        grunt.file.write(dest, twigTemplate.render(actualData));
+      }
     }
   };
 
-  GruntTwigRender.prototype._getData = function(data)
+  GruntTwigRender.prototype._getData = function(data, dataPath)
   {
     var datatype = typeof data;
 
     if (datatype === "undefined" || data == null) {
       grunt.fail.fatal("Data can not be undefined or null.");
+      return null;
     }
-    else if (datatype === "string") {
-      return this._getDataFromFile(data);
-    }
-    else if (Array.isArray(data)) {
+
+    var rawData = null;
+    if (!rawData && datatype === "string") {
+      rawData = this._getDataFromFile(data);
+    } 
+    if (!rawData && Array.isArray(data)) {
       var mergedData = {};
       data.forEach(function(item) {
         item = this._getData(item);
         mergedData = merge(mergedData, item);
       }.bind(this));
-      return mergedData;
+      rawData =  mergedData;
     }
-    else if (datatype !== "object") {
-      grunt.log.warn("Received data of type '" + datatype + "'. Expected 'object' or 'string'. Use at your own risk!");
+    if(!rawData) {
+      rawData = data;
+      if (datatype !== "object") {
+        grunt.log.warn("Received data of type '" + datatype + "'. Expected 'object' or 'string'. Use at your own risk!");
+      }
     }
-    return data;
+
+    if(dataPath) {
+      rawData = getProperty(dataPath, rawData);
+    }
+
+    return rawData;
   };
 
   /* jshint -W061 */
@@ -104,7 +139,7 @@ module.exports = function(grunt) {
         grunt.log.warn("Reading from a JSON5 but library missing - install it with: npm install json5");
         return null;
       }
-    } else if (/\.json?$/i.test(dataPath)) {
+    } else if (/\.json$/i.test(dataPath)) {
       if (json5) {
         return this._getDataFromJSON5(dataPath);
       } else {
@@ -137,7 +172,8 @@ module.exports = function(grunt) {
       if (src && isArray(src)) {src = src[0];}
       if(src && !fileData.template) {fileData.template = src;}
       if(src && !fileData.data) {fileData.data = src;}
-      renderer.render(fileData.data, fileData.template, fileData.dest);
+
+      renderer.render(fileData.data, fileData.dataPath, fileData.template, fileData.dest);
       grunt.log.writeln('File ' + chalk.cyan(fileData.dest) + ' created.');
     });
 

@@ -120,10 +120,9 @@ grunt.initConfig({
 
 The `data` parameter accepts multiple formats, here is a detailed description of each.
 
-#### JSON file
-`data` should be a string containing the path to a valid JSON file, ending in `.json`, relative to current directory.
+#### filename (string): JSON, JSON5 or YAML
+JSON file should end in `.json`, YAML in `.yml`.
 
-#### JSON5 file
 [JSON5](http://json5.org/) is an extension to standard JSON, allowing (among other things) comments and multi-line strings.
 This is an optional format, to enable it you need to install JSON5:
 ```sh
@@ -131,15 +130,88 @@ npm install json5
 ```
 Then simply set `data` to the path of a json5 file (ending in `.json` or `.json5`).
 
-#### YAML file
-Set `data` to the path of a YAML (`.yml`) file.
-
 #### Javascript object
 Used as is.
 
 #### Array
 Each element of the array can be any of the accepted format, results are merged.
 In case of conflicts, last data in the array has priority.
+
+
+### dataPath
+An optional `dataPath` string can be supplied, in dot notation format.
+If supplied, renderer will look for it in the loaded data and pass it as root to the template.
+```js
+files: [
+  {
+    data: {
+      post: {
+        title: "a new post",
+        content: "about life"
+      },
+      info: {
+        published: "2014/09/12",
+        size: 1234
+        author
+      }
+    },
+    dataPath: "post.info",
+  },
+```
+Then in template `post.twig` use `{{published}}` directly
+
+### Multiple destinations
+
+If the data parameter results in an array
+(either through dataPath or as file containing a Javascript array),
+then multiple destination files are generated.
+Their names are the `template` parameter with '_(number)' appended to the filename.
+
+For example:
+###### data.json
+```json
+{
+  "posts": [
+    {
+      "title": "first post",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."
+    },
+    {
+      "title": "another post",
+      "content": "Fugiat enim, at sit natus temporibus maxime repudiandae."
+    }
+  ]
+}
+```
+###### one_post.twig
+```twig
+<h1>{{title}}</h1>
+<p>{{content}}</p>
+```
+###### Gruntfile
+```js
+grunt.initConfig({
+  twig_render: {
+    your_target: {
+      files : [
+        {
+          data: "path/to/data/data.json",
+          dataPath: "posts",
+          template: "path/to/one_post.twig",
+          dest: "file/to/post.html"
+        }
+      ]
+    },
+  },
+});
+```
+###### Files generated
+```
+post_0.html
+post_1.html
+
+```
+
 
 ### Options
 
@@ -324,6 +396,12 @@ options:
 ```
 
 ## Release History
+
+__1.4.0__
+
+  * dataPath parameter, to load sub-part of a data structure.
+  * data arrays to generate multiple destinations.
+
 
 __1.3.0__
 

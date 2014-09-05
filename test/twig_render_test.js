@@ -22,6 +22,12 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
+var testFilesEqual = function(test, pathToActual, pathToExpected, message) {
+    var actual = grunt.file.read(pathToActual);
+    var expected = grunt.file.read(pathToExpected);
+    test.equal(actual, expected, message);
+};
+
 exports.twig_render = {
   setUp: function(done) {
     // setup here if necessary
@@ -66,11 +72,7 @@ exports.twig_render = {
   },
   multiple_data: function(test) {
     test.expect(1);
-
-    var actual = grunt.file.read('tmp/hello_planet_multiple_data.html');
-    var expected = grunt.file.read('test/expected/hello_planet_multiple_data.html');
-    test.equal(actual, expected, 'should render when given array of data items.');
-
+    testFilesEqual(test, 'tmp/hello_planet_multiple_data.html', 'test/expected/hello_planet_multiple_data.html', 'should render when given array of data items.');
     test.done();
   },
   src_as_data_file: function(test) {
@@ -91,6 +93,7 @@ exports.twig_render = {
 
     test.done();
   },
+
   json5_file: function(test) {
     test.expect(1);
     
@@ -102,7 +105,6 @@ exports.twig_render = {
       // ignore
       hasJson5 = false;
     }
-
     var generatedFile = 'tmp/hello_world_json5.html';
     var expectedFile = 'test/expected/hello_world.html';
     if(hasJson5) {
@@ -115,6 +117,25 @@ exports.twig_render = {
     }
     test.done();
   },
+
+  dataPath: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_world_path.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render properly with dataPath.');
+
+    test.done();
+  },
+
+  dataMulti: function(test) {
+    test.expect(3);
+    testFilesEqual(test, 'tmp/greeting_0.html', 'test/expected/greeting_0.html');
+    testFilesEqual(test, 'tmp/greeting_1.html', 'test/expected/greeting_1.html');
+    testFilesEqual(test, 'tmp/greeting_2.html', 'test/expected/greeting_2.html');
+    test.done();
+  },
+
   twig_filter_extensions: function(test) {
     test.expect(1);
 

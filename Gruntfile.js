@@ -105,11 +105,32 @@ module.exports = function(grunt) {
         files: [
           {
             data: 'test/fixtures/objects/hello_world.json5',
-            src: 'test/fixtures/templates/hello_world.twig',
+            template: 'test/fixtures/templates/hello_world.twig',
             dest: 'tmp/hello_world_json5.html'
           }
         ]
       },
+      data_path: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world_path.json',
+            dataPath: 'path.to.data',
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_path.html'
+          }
+        ]
+      },
+      data_multi: {
+        files: [
+          {
+            data: 'test/fixtures/objects/multi.json',
+            dataPath: 'list',
+            template: 'test/fixtures/templates/greet.twig',
+            dest: 'tmp/greeting.html'
+          }
+        ]
+      },
+
       twig_filter_extensions: {
         options: {
           extensions: [

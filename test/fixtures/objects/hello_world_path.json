@@ -1,0 +1,10 @@
+{
+  "path": {
+    "to": {
+      "data": {
+        "greeting": "Hello",
+        "reversed_target": "dlrow"
+      }
+    }
+  } 
+}
