@@ -77,14 +77,16 @@ module.exports = function(grunt) {
     };
 
     if(actualData) {
-      if(isArray(actualData)) {
-        for (var i = 0, len = actualData.length; i < len; i++) { 
+      if(isArray(actualData.dataPath)) {
+        var pathArray = actualData.dataPath;
+        for (var i = 0, len = pathArray.length; i < len; i++) { 
           var tt = Twig.twig({path: template, async: false});
           // compute destination path by inserting '_n'
           var destPath = dest.replace(/(.*)(\.[^\.]+)$/, replacer);
-          grunt.log.ok("dg="+destPath);
-          grunt.file.write(destPath, tt.render(actualData[i]));
+          actualData.dataPath = pathArray[i];
+          grunt.file.write(destPath, tt.render(actualData));
         }
+        actualData.dataPath = pathArray;
       } else {
         var twigTemplate = Twig.twig({
           path: template,
@@ -124,7 +126,7 @@ module.exports = function(grunt) {
     }
 
     if(dataPath) {
-      rawData = getProperty(dataPath, rawData);
+      rawData.dataPath = getProperty(dataPath, rawData);
     }
 
     return rawData;

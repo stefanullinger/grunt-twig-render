@@ -140,7 +140,8 @@ In case of conflicts, last data in the array has priority.
 
 ### dataPath
 An optional `dataPath` string can be supplied, in dot notation format.
-If supplied, renderer will look for it in the loaded data and pass it as root to the template.
+If supplied, renderer will look for it in the loaded data and pass it as `dataPath` property to the template.
+This lets you call the same template with different parts of the data tree.
 ```js
 files: [
   {
@@ -148,24 +149,24 @@ files: [
       post: {
         title: "a new post",
         content: "about life"
-      },
-      info: {
-        published: "2014/09/12",
-        size: 1234
-        author
+        info: {
+          published: "2014/09/12",
+          size: 1234,
+          author: "John Doe"
+        }
       }
-    },
+    }
     dataPath: "post.info",
   },
 ```
-Then in template `post.twig` use `{{published}}` directly
+Then in template `post.twig` use `{{dataPath.published}}` directly
 
 ### Multiple destinations
 
 If the data parameter results in an array
 (either through dataPath or as file containing a Javascript array),
 then multiple destination files are generated.
-Their names are the `template` parameter with '_(number)' appended to the filename.
+Their names are the `destination` parameter with '_(number)' appended to the filename.
 
 For example:
 ###### data.json
@@ -185,8 +186,8 @@ For example:
 ```
 ###### one_post.twig
 ```twig
-<h1>{{title}}</h1>
-<p>{{content}}</p>
+<h1>{{dataPath.title}}</h1>
+<p>{{dataPath.content}}</p>
 ```
 ###### Gruntfile
 ```js
@@ -397,6 +398,9 @@ options:
 
 ## Release History
 
+__1.4.1__
+  * dataPath returns full data object with additional `dataPath` property, instead of just the data pointed to (allows template to access full context).
+   
 __1.4.0__
 
   * dataPath parameter, to load sub-part of a data structure.
