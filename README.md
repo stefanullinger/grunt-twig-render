@@ -20,14 +20,14 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-twig-render');
 ```
 
-## The "twig_render" task
+## The "twigRender" task
 
 ### Overview
-In your project's Gruntfile, add a section named `twig_render` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `twigRender` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  twig_render: {
+  twigRender: {
     options: {
       // Task-specific options go here.
     },
@@ -79,7 +79,7 @@ files: [
 Compile all your templates, with data from a central data file:
 ```js
 grunt.initConfig({
-  twig_render: {
+  twigRender: {
     your_target: {
       files : [
         {
@@ -99,7 +99,7 @@ grunt.initConfig({
 Compile a list of posts, same template but different data files:
 ```js
 grunt.initConfig({
-  twig_render: {
+  twigRender: {
     your_target: {
       files : [
         {
@@ -191,7 +191,7 @@ For example:
 ###### Gruntfile
 ```js
 grunt.initConfig({
-  twig_render: {
+  twigRender: {
     your_target: {
       files : [
         {
@@ -397,6 +397,10 @@ options:
 
 ## Release History
 
+__1.5.0__
+
+  * task renamed to `twigRender` (was `twig_render`), to comply with Javascript conventions and make jshint happy in client codes.
+
 __1.4.0__
 
   * dataPath parameter, to load sub-part of a data structure.
@@ -438,4 +442,4 @@ __0.2.0__
 
 __0.1.0__
 
-  * Defined twig_render task.
+  * Defined twigRender task.

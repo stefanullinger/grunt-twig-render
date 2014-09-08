@@ -28,7 +28,7 @@ var testFilesEqual = function(test, pathToActual, pathToExpected, message) {
     test.equal(actual, expected, message);
 };
 
-exports.twig_render = {
+exports.twigRender = {
   setUp: function(done) {
     // setup here if necessary
     done();

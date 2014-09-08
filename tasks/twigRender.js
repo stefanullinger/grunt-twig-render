@@ -161,7 +161,7 @@ module.exports = function(grunt) {
     return json5.parse(data);
   };
 
-  grunt.registerMultiTask('twig_render', 'Render twig templates', function() {
+  grunt.registerMultiTask('twigRender', 'Render twig templates', function() {
     var renderer = new GruntTwigRender(this.options);
     this.files.forEach(function(fileData) {
       // We want to allow globbing of data OR templates (can't do both),
