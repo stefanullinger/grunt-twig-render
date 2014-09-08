@@ -115,7 +115,7 @@ module.exports = function(grunt) {
           {
             data: 'test/fixtures/objects/hello_world_path.json',
             dataPath: 'path.to.data',
-            template: 'test/fixtures/templates/hello_world.twig',
+            template: 'test/fixtures/templates/hello_world_path.twig',
             dest: 'tmp/hello_world_path.html'
           }
         ]
