@@ -1,0 +1,10 @@
+{
+  "list" : [
+    { "greeting": "Hello World" },
+    { "greeting": "this one should NOT be used",
+      "propertyToFlatten": [
+      { "greeting": "Hola Mundo" },
+      { "greeting": "Salut le Monde" }
+    ]}
+  ]
+}

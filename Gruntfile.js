@@ -130,6 +130,17 @@ module.exports = function(grunt) {
           }
         ]
       },
+      data_flatten: {
+        files: [
+          {
+            data: 'test/fixtures/objects/flatten.json',
+            dataPath: 'list',
+            flatten: 'propertyToFlatten',
+            template: 'test/fixtures/templates/greet.twig',
+            dest: 'tmp/greeting_flatten.html'
+          }
+        ]
+      },
 
       twig_filter_extensions: {
         options: {

@@ -134,6 +134,14 @@ exports.twigRender = {
     test.done();
   },
 
+    dataFlatten: function(test) {
+    test.expect(3);
+    testFilesEqual(test, 'tmp/greeting_flatten_0.html', 'test/expected/greeting_0.html');
+    testFilesEqual(test, 'tmp/greeting_flatten_1.html', 'test/expected/greeting_1.html');
+    testFilesEqual(test, 'tmp/greeting_flatten_2.html', 'test/expected/greeting_2.html');
+    test.done();
+  },
+
   twig_filter_extensions: function(test) {
     test.expect(1);
 

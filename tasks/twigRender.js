@@ -70,7 +70,8 @@ module.exports = function(grunt) {
     });
   }
 
-  GruntTwigRender.prototype.render = function(data, dataPath, template, dest) {
+  GruntTwigRender.prototype.render = function(data, dataPath, template, dest, flatten) {
+    var i, len; //loop vars
     var actualData = this._getData(data, dataPath);
     var replacer = function(match, filename, extension) {
       return filename+"_"+i+extension;
@@ -79,7 +80,19 @@ module.exports = function(grunt) {
     if(actualData) {
       if(isArray(actualData.dataPath)) {
         var pathArray = actualData.dataPath;
-        for (var i = 0, len = pathArray.length; i < len; i++) { 
+        // flatten as needed
+        if(flatten) {
+          pathArray = [];
+          for (i = 0, len = actualData.dataPath.length; i < len; i++){
+            var elt = actualData.dataPath[i];
+            if(elt[flatten]) {
+              pathArray = pathArray.concat(elt[flatten]);
+            } else {
+              pathArray.push(elt);
+            }
+          }
+        }
+        for (i = 0, len = pathArray.length; i < len; i++) { 
           var tt = Twig.twig({path: template, async: false});
           // compute destination path by inserting '_n'
           var destPath = dest.replace(/(.*)(\.[^\.]+)$/, replacer);
@@ -175,7 +188,7 @@ module.exports = function(grunt) {
       if(src && !fileData.template) {fileData.template = src;}
       if(src && !fileData.data) {fileData.data = src;}
 
-      renderer.render(fileData.data, fileData.dataPath, fileData.template, fileData.dest);
+      renderer.render(fileData.data, fileData.dataPath, fileData.template, fileData.dest, fileData.flatten);
       grunt.log.writeln('File ' + chalk.cyan(fileData.dest) + ' created.');
     });
 

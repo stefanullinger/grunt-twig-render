@@ -213,6 +213,43 @@ post_1.html
 
 ```
 
+### Flattening
+
+If the data parameter results in a tree (that is, an array containing some arrays),
+you can use the `flatten` property to reduce this into a list:
+
+#####data.json
+```json
+{
+  "menu": [
+    {"label": "action1"},
+    {"label": "action2"},
+    {
+      "label": "sub-menu",
+      "actions": [
+        {"label": "action3"},
+        {"label": "action4"}
+      ]
+    }
+  ]
+}
+```
+
+#####Gruntfile
+```js
+files: [
+  {
+    data: "data.json",
+    dataPath: "menu",
+    flatten: "actions"
+    template: "myTemplate.twig",
+    dest: "myDest.html"
+  },
+```
+
+Will result in 4 files (`myDest_0-3.html`)
+
+
 
 ### Options
 
@@ -397,6 +434,10 @@ options:
 ```
 
 ## Release History
+
+__1.6.0__
+
+  * added `flatten` option to flatten data lists for multi-files generation.
 
 __1.5.0__
 
