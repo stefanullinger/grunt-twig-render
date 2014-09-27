@@ -1,0 +1,7 @@
+{
+  "list" : [
+    { "greeting": "Hello World" },
+    { "greeting": "Hola Mundo" },
+    { "greeting": "Salut le Monde" }
+  ]
+}

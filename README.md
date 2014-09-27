@@ -20,14 +20,14 @@ Once the plugin has been installed, it may be enabled inside your Gruntfile with
 grunt.loadNpmTasks('grunt-twig-render');
 ```
 
-## The "twig_render" task
+## The "twigRender" task
 
 ### Overview
-In your project's Gruntfile, add a section named `twig_render` to the data object passed into `grunt.initConfig()`.
+In your project's Gruntfile, add a section named `twigRender` to the data object passed into `grunt.initConfig()`.
 
 ```js
 grunt.initConfig({
-  twig_render: {
+  twigRender: {
     options: {
       // Task-specific options go here.
     },
@@ -37,7 +37,7 @@ grunt.initConfig({
       },
       files : [
         {
-          data: // Path to JSON or YAML file, or POJO, or Array of filepaths and POJO
+          data: // Path to JSON, JSON5 or YAML file, or POJO, or Array of filepaths and POJO
           template: // Path to template file
           dest: // Path to output destination here
         }
@@ -46,6 +46,8 @@ grunt.initConfig({
   },
 });
 ```
+You can also use [Grunt built-in files syntax](http://gruntjs.com/configuring-tasks#files) for more dynamic lists.
+In that case, one of `data` or `template` must be specified, the other one will use the dynamic `src` property.
 
 **Note:** The `files` parameter _must_ be an array, and _must_ conform to the format specified above. Each object in the file array represents _one_ rendered template.
 
@@ -73,6 +75,181 @@ files: [
   }
 ]
 ```
+
+Compile all your templates, with data from a central data file:
+```js
+grunt.initConfig({
+  twigRender: {
+    your_target: {
+      files : [
+        {
+          data: 'path/to/datafile.json',
+          expand: true,
+          cwd: 'path/to/templates/',
+          src: ['**/*.twig', '!**/_*.twig'], // Match twig templates but not partials
+          dest: 'path/to/output/',
+          ext: '.html'   // index.twig + datafile.json => index.html
+        }
+      ]
+    },
+  },
+});
+```
+
+Compile a list of posts, same template but different data files:
+```js
+grunt.initConfig({
+  twigRender: {
+    your_target: {
+      files : [
+        {
+          template: 'path/to/template.twig',
+          expand: true,
+          cwd: 'path/to/data/',
+          src: ['post*.json'], // post1.json, post2.json,...
+          dest: 'path/to/output/',
+          ext: '.html'   // post1.json + template.twig => post1.html
+        }
+      ]
+    },
+  },
+});
+```
+
+### Data parameter
+
+The `data` parameter accepts multiple formats, here is a detailed description of each.
+
+#### filename (string): JSON, JSON5 or YAML
+JSON file should end in `.json`, YAML in `.yml`.
+
+[JSON5](http://json5.org/) is an extension to standard JSON, allowing (among other things) comments and multi-line strings.
+This is an optional format, to enable it you need to install JSON5:
+```sh
+npm install json5
+```
+Then simply set `data` to the path of a json5 file (ending in `.json` or `.json5`).
+
+#### Javascript object
+Used as is.
+
+#### Array
+Each element of the array can be any of the accepted format, results are merged.
+In case of conflicts, last data in the array has priority.
+
+
+### dataPath
+An optional `dataPath` string can be supplied, in dot notation format.
+If supplied, renderer will look for it in the loaded data and pass it as `dataPath` property to the template.
+This lets you call the same template with different parts of the data tree.
+```js
+files: [
+  {
+    data: {
+      post: {
+        title: "a new post",
+        content: "about life"
+        info: {
+          published: "2014/09/12",
+          size: 1234,
+          author: "John Doe"
+        }
+      }
+    }
+    dataPath: "post.info",
+  },
+```
+Then in template `post.twig` use `{{dataPath.published}}` directly
+
+### Multiple destinations
+
+If the data parameter results in an array
+(either through dataPath or as file containing a Javascript array),
+then multiple destination files are generated.
+Their names are the `destination` parameter with '_(number)' appended to the filename.
+
+For example:
+###### data.json
+```json
+{
+  "posts": [
+    {
+      "title": "first post",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."
+    },
+    {
+      "title": "another post",
+      "content": "Fugiat enim, at sit natus temporibus maxime repudiandae."
+    }
+  ]
+}
+```
+###### one_post.twig
+```twig
+<h1>{{dataPath.title}}</h1>
+<p>{{dataPath.content}}</p>
+```
+###### Gruntfile
+```js
+grunt.initConfig({
+  twigRender: {
+    your_target: {
+      files : [
+        {
+          data: "path/to/data/data.json",
+          dataPath: "posts",
+          template: "path/to/one_post.twig",
+          dest: "file/to/post.html"
+        }
+      ]
+    },
+  },
+});
+```
+###### Files generated
+```
+post_0.html
+post_1.html
+
+```
+
+### Flattening
+
+If the data parameter results in a tree (that is, an array containing some arrays),
+you can use the `flatten` property to reduce this into a list:
+
+#####data.json
+```json
+{
+  "menu": [
+    {"label": "action1"},
+    {"label": "action2"},
+    {
+      "label": "sub-menu",
+      "actions": [
+        {"label": "action3"},
+        {"label": "action4"}
+      ]
+    }
+  ]
+}
+```
+
+#####Gruntfile
+```js
+files: [
+  {
+    data: "data.json",
+    dataPath: "menu",
+    flatten: "actions"
+    template: "myTemplate.twig",
+    dest: "myDest.html"
+  },
+```
+
+Will result in 4 files (`myDest_0-3.html`)
+
+
 
 ### Options
 
@@ -258,6 +435,28 @@ options:
 
 ## Release History
 
+__1.6.0__
+
+  * added `flatten` option to flatten data lists for multi-files generation.
+
+__1.5.0__
+
+  * task renamed to `twigRender` (was `twig_render`), to comply with Javascript conventions and make jshint happy in client codes.
+
+__1.4.1__
+  * dataPath returns full data object with additional `dataPath` property, instead of just the data pointed to (allows template to access full context).
+
+__1.4.0__
+
+  * dataPath parameter, to load sub-part of a data structure.
+  * data arrays to generate multiple destinations.
+
+
+__1.3.0__
+
+  * Use src for data or template, allowing globbing and more
+  * Allow use of JSON5, if library is present (optional).
+
 __1.2.0__
 
   * Allowing data to be an array of strings/objects.
@@ -288,4 +487,4 @@ __0.2.0__
 
 __0.1.0__
 
-  * Defined twig_render task.
+  * Defined twigRender task.

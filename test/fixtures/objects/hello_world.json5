@@ -1,0 +1,8 @@
+{
+//JSON5 accepts comments!
+  "greeting": "H\
+e\
+llo\
+",
+  "reversed_target": "dlrow"
+}

@@ -22,11 +22,18 @@ var grunt = require('grunt');
     test.ifError(value)
 */
 
-exports.twig_render = {
+var testFilesEqual = function(test, pathToActual, pathToExpected, message) {
+    var actual = grunt.file.read(pathToActual);
+    var expected = grunt.file.read(pathToExpected);
+    test.equal(actual, expected, message);
+};
+
+exports.twigRender = {
   setUp: function(done) {
     // setup here if necessary
     done();
   },
+
   json_data_file: function(test) {
     test.expect(1);
 
@@ -65,13 +72,76 @@ exports.twig_render = {
   },
   multiple_data: function(test) {
     test.expect(1);
+    testFilesEqual(test, 'tmp/hello_planet_multiple_data.html', 'test/expected/hello_planet_multiple_data.html', 'should render when given array of data items.');
+    test.done();
+  },
+  src_as_data_file: function(test) {
+    test.expect(1);
 
-    var actual = grunt.file.read('tmp/hello_planet_multiple_data.html');
-    var expected = grunt.file.read('test/expected/hello_planet_multiple_data.html');
-    test.equal(actual, expected, 'should render when given array of data items.');
+    var actual = grunt.file.read('tmp/hello_world_src_as_data_file.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render when given src as data.');
 
     test.done();
   },
+  src_as_template_file: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/hello_world_src_as_template_file.html');
+    var expected = grunt.file.read('test/expected/hello_world.html');
+    test.equal(actual, expected, 'should render when given src as template.');
+
+    test.done();
+  },
+
+  json5_file: function(test) {
+    test.expect(1);
+    
+    var hasJson5;
+    try {
+      hasJson5 = require('json5');
+      hasJson5 = true;
+    } catch(err) {
+      // ignore
+      hasJson5 = false;
+    }
+    var generatedFile = 'tmp/hello_world_json5.html';
+    var expectedFile = 'test/expected/hello_world.html';
+    if(hasJson5) {
+      var actual = grunt.file.read(generatedFile);
+      var expected = grunt.file.read(expectedFile);
+      test.equal(actual, expected, 'should render when given JSON5.');
+    } else {
+      var fs = require('fs');
+      test.equal(false, fs.existsSync(generatedFile), "should not render any file if JSON5 missing and data=json5");
+    }
+    test.done();
+  },
+
+  dataPath: function(test) {
+    test.expect(1);
+
+    testFilesEqual(test, 'tmp/hello_world_path.html', 'test/expected/hello_world.html', 'should render properly with dataPath.');
+
+    test.done();
+  },
+
+  dataMulti: function(test) {
+    test.expect(3);
+    testFilesEqual(test, 'tmp/greeting_0.html', 'test/expected/greeting_0.html');
+    testFilesEqual(test, 'tmp/greeting_1.html', 'test/expected/greeting_1.html');
+    testFilesEqual(test, 'tmp/greeting_2.html', 'test/expected/greeting_2.html');
+    test.done();
+  },
+
+    dataFlatten: function(test) {
+    test.expect(3);
+    testFilesEqual(test, 'tmp/greeting_flatten_0.html', 'test/expected/greeting_0.html');
+    testFilesEqual(test, 'tmp/greeting_flatten_1.html', 'test/expected/greeting_1.html');
+    testFilesEqual(test, 'tmp/greeting_flatten_2.html', 'test/expected/greeting_2.html');
+    test.done();
+  },
+
   twig_filter_extensions: function(test) {
     test.expect(1);
 

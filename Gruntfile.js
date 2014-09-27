@@ -29,7 +29,7 @@ module.exports = function(grunt) {
     },
 
     // Configuration to be run (and then tested).
-    twig_render: {
+    twigRender: {
       json_data_file: {
         files: [
           {
@@ -83,6 +83,65 @@ module.exports = function(grunt) {
           }
         ]
       },
+      src_as_data_file: {
+        files: [
+          {
+            src: 'test/fixtures/objects/hello_world.json',
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_src_as_data_file.html'
+          }
+        ]
+      },
+      src_as_template_file: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world.json',
+            src: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_src_as_template_file.html'
+          }
+        ]
+      },
+      json5_file: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world.json5',
+            template: 'test/fixtures/templates/hello_world.twig',
+            dest: 'tmp/hello_world_json5.html'
+          }
+        ]
+      },
+      data_path: {
+        files: [
+          {
+            data: 'test/fixtures/objects/hello_world_path.json',
+            dataPath: 'path.to.data',
+            template: 'test/fixtures/templates/hello_world_path.twig',
+            dest: 'tmp/hello_world_path.html'
+          }
+        ]
+      },
+      data_multi: {
+        files: [
+          {
+            data: 'test/fixtures/objects/multi.json',
+            dataPath: 'list',
+            template: 'test/fixtures/templates/greet.twig',
+            dest: 'tmp/greeting.html'
+          }
+        ]
+      },
+      data_flatten: {
+        files: [
+          {
+            data: 'test/fixtures/objects/flatten.json',
+            dataPath: 'list',
+            flatten: 'propertyToFlatten',
+            template: 'test/fixtures/templates/greet.twig',
+            dest: 'tmp/greeting_flatten.html'
+          }
+        ]
+      },
+
       twig_filter_extensions: {
         options: {
           extensions: [
@@ -231,7 +290,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'twig_render', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'twigRender', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
