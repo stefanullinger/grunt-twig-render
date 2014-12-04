@@ -253,6 +253,14 @@ Will result in 4 files (`myDest_0-3.html`)
 
 ### Options
 
+#### options.cache
+Type: `Boolean`  
+Default value: `false`
+
+Indicates if Twig should use a template cache or read template file every time.
+Default is set to false to enable template file watch and recompilation.
+Set it to true if you need to generate lots of files with an identical template.
+
 #### options.extensions
 Type: `Array`  
 Default value: `[]`
@@ -434,6 +442,10 @@ options:
 ```
 
 ## Release History
+
+__1.7.0__
+
+  * added `cache` option to enable/disable Twig caching (needed for livereload).
 
 __1.6.0__
 
