@@ -30,7 +30,8 @@ module.exports = function(grunt) {
   var Twig = require("twig"),
 
   DEFAULT_OPTIONS = {
-    extensions: []
+    extensions: [],
+    cache: false,
   };
 
   var json5 = null;
@@ -68,6 +69,7 @@ module.exports = function(grunt) {
     this.options.extensions.forEach(function(fn) {
       Twig.extend(fn);
     });
+    Twig.cache(this.options.cache);
   }
 
   GruntTwigRender.prototype.render = function(data, dataPath, template, dest, flatten) {
