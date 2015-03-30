@@ -129,7 +129,7 @@ module.exports = function(grunt) {
       var mergedData = {};
       data.forEach(function(item) {
         item = this._getData(item);
-        mergedData = merge(mergedData, item);
+        mergedData = merge.recursive(mergedData, item);
       }.bind(this));
       rawData =  mergedData;
     }

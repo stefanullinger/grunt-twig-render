@@ -443,6 +443,10 @@ options:
 
 ## Release History
 
+__1.7.1__
+
+  * bugfix: array of data did not merge objects recursively, now does.
+
 __1.7.0__
 
   * added `cache` option to enable/disable Twig caching (needed for livereload).
