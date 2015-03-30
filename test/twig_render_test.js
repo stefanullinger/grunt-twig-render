@@ -75,6 +75,11 @@ exports.twigRender = {
     testFilesEqual(test, 'tmp/hello_planet_multiple_data.html', 'test/expected/hello_planet_multiple_data.html', 'should render when given array of data items.');
     test.done();
   },
+  multiple_data_deep: function(test) {
+    test.expect(1);
+    testFilesEqual(test, 'tmp/hello_world_multiple_data_deep.html', 'test/expected/hello_world.html', 'should merge deep items too.');
+    test.done();
+  },
   src_as_data_file: function(test) {
     test.expect(1);
 

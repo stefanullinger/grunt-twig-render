@@ -2,3 +2,5 @@
 node_modules
 npm-debug.log
 tmp
+# IDE files
+.idea

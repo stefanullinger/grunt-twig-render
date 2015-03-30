@@ -83,6 +83,18 @@ module.exports = function(grunt) {
           }
         ]
       },
+      multiple_data_deep: {
+        files: [
+          {
+            data: [
+              {main: {greeting: "Hello"}},
+              {main: {reversed_target: "dlrow"}}
+            ],
+            template: 'test/fixtures/templates/hello_world_deep.twig',
+            dest: 'tmp/hello_world_multiple_data_deep.html'
+          }
+        ]
+      },
       src_as_data_file: {
         files: [
           {
