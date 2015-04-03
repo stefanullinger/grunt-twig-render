@@ -179,21 +179,25 @@ module.exports = function(grunt) {
   };
 
   grunt.registerMultiTask('twigRender', 'Render twig templates', function() {
-    var renderer = new GruntTwigRender(this.options);
-    this.files.forEach(function(fileData) {
-      // We want to allow globbing of data OR templates (can't do both),
-      // but globbing expands the src parameter only.
-      // So we use src as the moving parameter, the other one (data or template)
-      // MUST be specified.
-      var src = fileData.src;
-      if (src && isArray(src)) {src = src[0];}
-      if(src && !fileData.template) {fileData.template = src;}
-      if(src && !fileData.data) {fileData.data = src;}
+    try {
+      var renderer = new GruntTwigRender(this.options);
+      this.files.forEach(function(fileData) {
+        // We want to allow globbing of data OR templates (can't do both),
+        // but globbing expands the src parameter only.
+        // So we use src as the moving parameter, the other one (data or template)
+        // MUST be specified.
+        var src = fileData.src;
+        if (src && isArray(src)) {src = src[0];}
+        if(src && !fileData.template) {fileData.template = src;}
+        if(src && !fileData.data) {fileData.data = src;}
 
-      renderer.render(fileData.data, fileData.dataPath, fileData.template, fileData.dest, fileData.flatten);
-      grunt.log.writeln('File ' + chalk.cyan(fileData.dest) + ' created.');
-    });
-
+        renderer.render(fileData.data, fileData.dataPath, fileData.template, fileData.dest, fileData.flatten);
+        grunt.log.writeln('File ' + chalk.cyan(fileData.dest) + ' created.');
+      });
+    } catch(err) {
+      // Fail the build if Twig.Error was thrown
+      grunt.fail.fatal(err);
+    }
   });
 
 };
