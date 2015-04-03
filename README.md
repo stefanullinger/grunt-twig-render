@@ -443,6 +443,10 @@ options:
 
 ## Release History
 
+__1.7.2__
+  
+  * Twig errors now cause grunt task to fail and logs the error.
+
 __1.7.1__
 
   * bugfix: array of data did not merge objects recursively, now does.
