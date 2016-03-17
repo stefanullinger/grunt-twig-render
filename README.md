@@ -443,6 +443,10 @@ options:
 
 ## Release History
 
+__1.7.3__
+
+  * Updated twig.js to 0.8.8.
+
 __1.7.2__
 
   * Twig errors now cause grunt task to fail and logs the error.
