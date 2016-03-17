@@ -1,7 +1,7 @@
 # grunt-twig-render
 
-[![Build Status](https://travis-ci.org/sullinger/grunt-twig-render.png?branch=master)](https://travis-ci.org/sullinger/grunt-twig-render)
-[![NPM version](https://badge.fury.io/js/grunt-twig-render.png)](http://badge.fury.io/js/grunt-twig-render)
+[![Build Status](https://travis-ci.org/stefanullinger/grunt-twig-render.svg?branch=master)](https://travis-ci.org/stefanullinger/grunt-twig-render)
+[![npm version](https://badge.fury.io/js/grunt-twig-render.svg)](https://badge.fury.io/js/grunt-twig-render)
 
 > Render twig templates
 
@@ -66,7 +66,7 @@ files: [
 ```js
 files: [
   {
-    data: { 
+    data: {
       greeting: "Hello",
       target: "world"
     },
@@ -254,7 +254,7 @@ Will result in 4 files (`myDest_0-3.html`)
 ### Options
 
 #### options.cache
-Type: `Boolean`  
+Type: `Boolean`
 Default value: `false`
 
 Indicates if Twig should use a template cache or read template file every time.
@@ -262,7 +262,7 @@ Default is set to false to enable template file watch and recompilation.
 Set it to true if you need to generate lots of files with an identical template.
 
 #### options.extensions
-Type: `Array`  
+Type: `Array`
 Default value: `[]`
 
 Can be an array of functions that extend TwigJS.
@@ -274,7 +274,7 @@ options:
 {
   extensions:
   [
-  
+
     // Usage: {{ [1, 2, 3]|fooJoin(' | ') }}
     // Output: 1 | 2 | 3
 
@@ -295,7 +295,7 @@ options:
         {
           join_str = params[0];
         }
-              
+
         if (value instanceof Array)
         {
           output = value;
@@ -303,25 +303,25 @@ options:
         else
         {
           keyset = value._keys || Object.keys(value);
-                  
+
           Twig.forEach(keyset, function(key)
           {
             if (key === "_keys")
             {
               return; // Ignore the _keys property
             }
-                    
+
             if (value.hasOwnProperty(key))
             {
               output.push(value[key]);
             }
           });
         }
-              
+
         return output.join(join_str);
       });
     }
-            
+
   ]
 }
 ```
@@ -333,12 +333,12 @@ options:
 {
   extensions:
   [
-  
+
     // Usage:
     //   {% for i in 1..3 %}
     //   {{ fooCycle(['odd', 'even'], i) }}
     //   {% endfor %}
-    
+
     // Output:
     //   even
     //   odd
@@ -352,7 +352,7 @@ options:
         return arr[pos];
       });
     }
-            
+
   ]
 }
 ```
@@ -364,15 +364,15 @@ options:
 {
   extensions:
   [
-  
+
     // Usage:
     //   {% fooSpaceless %}<div>
     //   <b>b</b>   <i>i</i>
     //   </div>{% endFooSpaceless %}
-    
+
     // Output:
     //   <div><b>b</b><i>i</i></div>
-    
+
 
     function(Twig)
     {
@@ -393,7 +393,7 @@ options:
 
           // A regular expression to find closing and opening tags with spaces between them
           rBetweenTagSpaces = />\s+</g,
-                  
+
           // Replace all space between closing and opening html tags
           output = unfiltered.replace(rBetweenTagSpaces,'><').trim();
 
@@ -415,7 +415,7 @@ options:
         open: false
       });
     }
-            
+
   ]
 }
 ```
@@ -444,7 +444,7 @@ options:
 ## Release History
 
 __1.7.2__
-  
+
   * Twig errors now cause grunt task to fail and logs the error.
 
 __1.7.1__
