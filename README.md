@@ -443,6 +443,10 @@ options:
 
 ## Release History
 
+__1.7.4__
+
+  * Updated twig.js to 0.10.0.
+
 __1.7.3__
 
   * Updated twig.js to 0.8.8.
