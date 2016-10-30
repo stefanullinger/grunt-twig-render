@@ -10,6 +10,7 @@
 
 var chalk = require( 'chalk' );
 var merge = require( 'merge' );
+var omit = require('object.omit');
 
 // http://stackoverflow.com/questions/5999998/how-can-i-check-if-a-javascript-variable-is-function-type
 function isFunction(functionToCheck) {
@@ -31,7 +32,10 @@ module.exports = function(grunt) {
 
   DEFAULT_OPTIONS = {
     extensions: [],
+    functions: {},
+    filters: {},
     cache: false,
+    async: false,
   };
 
   var json5 = null;
@@ -69,12 +73,32 @@ module.exports = function(grunt) {
     this.options.extensions.forEach(function(fn) {
       Twig.extend(fn);
     });
+
+    // apply defined functions
+    Object.keys(this.options.functions).forEach(function(name) {
+      var fn = this.options.functions[name];
+      if (!isFunction(fn)) {
+        grunt.fail.fatal('"' + name + '" needs to be a function!');
+      }
+      Twig.extendFunction(name, fn);
+    }.bind(this));
+
+    // apply defined filters
+    Object.keys(this.options.filters).forEach(function(name) {
+      var fn = this.options.filters[name];
+      if (!isFunction(fn)) {
+        grunt.fail.fatal('"' + name + '" needs to be a function!');
+      }
+      Twig.extendFilter(name, fn);
+    }.bind(this));
+
     Twig.cache(this.options.cache);
   }
 
   GruntTwigRender.prototype.render = function(data, dataPath, template, dest, flatten) {
     var i, len; //loop vars
     var actualData = this._getData(data, dataPath);
+    var twigOpts = omit(this.options, ['cache','functions','filters','extensions']);
     var replacer = function(match, filename, extension) {
       return filename+"_"+i+extension;
     };
@@ -95,7 +119,7 @@ module.exports = function(grunt) {
           }
         }
         for (i = 0, len = pathArray.length; i < len; i++) { 
-          var tt = Twig.twig({path: template, async: false});
+          var tt = Twig.twig(merge(twigOpts,{path: template}));
           // compute destination path by inserting '_n'
           var destPath = dest.replace(/(.*)(\.[^\.]+)$/, replacer);
           actualData.dataPath = pathArray[i];
@@ -103,10 +127,7 @@ module.exports = function(grunt) {
         }
         actualData.dataPath = pathArray;
       } else {
-        var twigTemplate = Twig.twig({
-          path: template,
-          async: false
-        });
+        var twigTemplate = Twig.twig(merge(twigOpts,{path: template}));
         grunt.file.write(dest, twigTemplate.render(actualData));
       }
     }

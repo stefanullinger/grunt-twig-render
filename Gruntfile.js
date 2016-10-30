@@ -260,6 +260,22 @@ module.exports = function(grunt) {
             dest: 'tmp/twig_tag_extensions.html'
           }
         ]
+      },
+      twig_params_and_simple_function: {
+        options: {
+          namespaces: {partials: 'test/fixtures/templates/partials'},
+          base: 'test/fixtures/templates',
+          functions: {
+            func: function(arg) { return arg; }
+          }
+        },
+        files: [
+          {
+            data: {},
+            template: 'test/fixtures/templates/partials/specific.twig',
+            dest: 'tmp/twig_params_and_simple_function.html'
+          }
+        ]
       }
     },
 
