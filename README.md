@@ -441,6 +441,38 @@ options:
 }
 ```
 
+#### options.functions
+Type: `Object`
+Default value: `{}`
+
+Object hash defining functions in TwigJS. 
+
+##### Example 1: Add asset function to TwigJS
+```js
+  options {
+    functions: {
+      asset: function(arg) { return 'my-asset-location/' + arg; }
+    }
+  }
+```
+
+#### options.filters
+Type: `Object`
+Default value: `{}`
+
+Object hash defining filters in TwigJS. 
+
+##### Example 1: Add dots filter to TwigJS
+```js
+  options {
+    filters: {
+      dots: function(arg) { return arg + '...'; }
+    }
+  }
+```
+
+For a complete list of available params see the [official twigjs documentation](https://github.com/twigjs/twig.js)
+
 ## Release History
 
 __1.7.4__

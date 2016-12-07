@@ -173,5 +173,14 @@ exports.twigRender = {
     test.equal(actual, expected, 'should render when given json data.');
 
     test.done();
+  },
+  twig_params_and_simple_function: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read('tmp/twig_params_and_simple_function.html');
+    var expected = grunt.file.read('test/expected/twig_params_and_simple_function.html');
+    test.equal(actual, expected, 'should render correctly with given params passed to twigjs.');
+
+    test.done();
   }
 };
