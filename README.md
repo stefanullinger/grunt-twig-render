@@ -351,6 +351,31 @@ options:
         var pos = i % arr.length;
         return arr[pos];
       });
+    },
+
+
+    // load data dynamically from file
+
+    // Usage:
+    //   data.json: { "test": "foobar" }
+    //   {% set mydata = data("path/to/jsonOrYml/data.json") %}
+    //   {{ mydata.test }}   
+
+    // Output:
+    //   foobar
+
+    function(Twig)
+    {
+      Twig.exports.extendFunction('data', function(filename)
+      {
+        var namespace_path = Twig.path.parsePath.apply(this, [this, filename]);
+
+        if (/\.yml$/i.test(namespace_path) || /\.yaml/i.test(namespace_path)){
+          return grunt.file.readYAML(namespace_path);
+        } else {
+          return grunt.file.readJSON(namespace_path);
+        }
+      });
     }
 
   ]
