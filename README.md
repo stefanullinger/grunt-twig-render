@@ -500,6 +500,10 @@ For a complete list of available params see the [official twigjs documentation](
 
 ## Release History
 
+__1.8.1__
+
+  * Updated twig.js to 1.10.4.
+
 __1.8.0__
 
   * Allows to use all available twigjs parameters and provides a more lightweight way to define custom functions and filters.
