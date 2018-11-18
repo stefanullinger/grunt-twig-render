@@ -500,6 +500,10 @@ For a complete list of available params see the [official twigjs documentation](
 
 ## Release History
 
+__1.8.2__
+
+  * Updated twig.js to 1.12.0.
+
 __1.8.1__
 
   * Updated twig.js to 1.10.4.
