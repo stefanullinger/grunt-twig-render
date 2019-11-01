@@ -217,7 +217,7 @@ module.exports = function(grunt) {
       });
     } catch(err) {
       // Fail the build if Twig.Error was thrown
-      grunt.fail.fatal(err);
+      grunt.fail.fatal(err.type + ' in file "' + err.file + '": ' + err.message );
     }
   });
 
