@@ -1,7 +1,7 @@
 {
   "name": "grunt-twig-render",
   "description": "Render twig templates",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "homepage": "https://github.com/sullinger/grunt-twig-render",
   "author": {
     "name": "Stefan Ullinger",

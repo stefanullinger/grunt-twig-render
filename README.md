@@ -359,7 +359,7 @@ options:
     // Usage:
     //   data.json: { "test": "foobar" }
     //   {% set mydata = data("path/to/jsonOrYml/data.json") %}
-    //   {{ mydata.test }}   
+    //   {{ mydata.test }}
 
     // Output:
     //   foobar
@@ -470,7 +470,7 @@ options:
 Type: `Object`
 Default value: `{}`
 
-Object hash defining functions in TwigJS. 
+Object hash defining functions in TwigJS.
 
 ##### Example 1: Add asset function to TwigJS
 ```js
@@ -485,7 +485,7 @@ Object hash defining functions in TwigJS.
 Type: `Object`
 Default value: `{}`
 
-Object hash defining filters in TwigJS. 
+Object hash defining filters in TwigJS.
 
 ##### Example 1: Add dots filter to TwigJS
 ```js
@@ -499,6 +499,10 @@ Object hash defining filters in TwigJS.
 For a complete list of available params see the [official twigjs documentation](https://github.com/twigjs/twig.js)
 
 ## Release History
+
+__1.8.3__
+
+  * Improved error message output.
 
 __1.8.2__
 
